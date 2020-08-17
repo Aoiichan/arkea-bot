@@ -35,10 +35,18 @@ let j = schedule.scheduleJob('0 7 * * *', async () => {
 	let day = returnThisDay();
 	getMenu(result, day, channel);
 });
+// directly copied from the scheduled job
+async function postMenu () {
+	let channel = bot.guilds.get(config.guildID).channels.get(config.menuChannelID);
+	let result = await SetCWeekMenuURL(config.restaurantID);
+	let day = returnThisDay();
+	getMenu(result, day, channel);
+}
+
 
 bot.on('message', async (message) => {
 	let content = message.content.toLowerCase();
-	if (content.substring(0, 1) == config.prefix) {
+	if (content.substring(0, config.prefix.length) == config.prefix) {
 		let args = content.substring(1).split(' ');
 		let cmd = args[0];
 
@@ -54,7 +62,8 @@ bot.on('message', async (message) => {
 				message.channel.send("Commands:");
 				//message.channel.send(message.channel);
 				break;
-
+			case 'post':
+				await postMenu();
 			//WIP
 			case 'menu':
 				let day = ConvertToISO(args[1]);
@@ -80,6 +89,10 @@ bot.on('message', async (message) => {
 				else
 					time = getEatingTime(atmClass, data)
 				message.channel.send(time)
+			
+			case 'shutdown':
+				if ( message.author.id === config.sysadmin){process.exit;}
+		
 		}
 	}
 });
