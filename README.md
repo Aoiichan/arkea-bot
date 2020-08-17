@@ -2,36 +2,37 @@
 
 ## Getting Started
 
-1. Clone git repo
+#### 1. Clone git repo
 ```
 https://github.com/Dingodhole/arkea-bot
 ```
-2. Run to install depencies:
+#### 2. Run to install depencies:
 
 ```
 npm install
 ```
 
-3. Run to start server:
+#### 3. Build:
 
 ```
-npm start
+npm run build
 ```
+#### 4. Edit configuration files 
+cd to build.
+Copy the files `config-template.json` and `lomat-template.json` to `config.json` and `lomat.json`. Fill the fields with information such as the bot token, maintainer ID, discord server and channel IDs. 
 
-To build but not start use:
+#### 5. Run the bot:
 
 ```
 npm run build
 ```
 
-
-## Contributing
-Just send pull request
-
 ## Authors
 
 * **Niilo Jaakkola** - *CEO, cleaning and code review*
 * **Lukas Luotola** - *Hosting and other ground work*
+
+* **Evelina S.** - *bug fixes, more cleanup, continuing development*
 
 ## License
 
