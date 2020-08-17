@@ -4,7 +4,7 @@
 
 #### 1. Clone git repo
 ```
-https://github.com/Dingodhole/arkea-bot
+https://github.com/Aoiichan/arkea-bot
 ```
 #### 2. Run to install depencies:
 
