@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch'
+import config from './config.json';
 
 // Function to get menu. Async needed for await and ...other for extra args in future
 async function getMenu(UrlJSON, day, channel, ...other) {
