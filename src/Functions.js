@@ -31,7 +31,7 @@ async function getMenu(UrlJSON, day, channel, ...other) {
 	//Send embbed message
 	channel.send({
 		embed: {
-			"color": 2134768,
+			"color": config.embedColor,
 			"timestamp": new Date(),
 			"footer": {
 				"icon_url": "https://pbs.twimg.com/profile_images/441542471760097280/9sDmsLIm_400x400.jpeg",

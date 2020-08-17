@@ -1,5 +1,6 @@
 {
-    "format" : "YYYY-MM-DDTHH:MM:SS+TZHH:TZMM",
+    "format-example" : "YYYY-MM-DDTHH:MM:SS+TZHH:TZMM",
+
     "syysloma" : "2020-10-15T12:00:00+02:00",
     "joululoma" : "2020-12-23T12:00:00+02:00",
     "talviloma" : "2021-02-18T12:00:00+02:00",
