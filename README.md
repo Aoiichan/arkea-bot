@@ -24,7 +24,7 @@ Copy the files `config-template.json` and `lomat-template.json` to `config.json`
 #### 5. Run the bot:
 
 ```
-npm run build
+npm start
 ```
 
 ## Authors
