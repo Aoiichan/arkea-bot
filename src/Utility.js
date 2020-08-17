@@ -13,7 +13,6 @@ function returnThisDay() {
 }
 
 function ConvertToISO(shortdate = "1/1/2000") {
-	//if (!shortdate){shortdate = "1/1/2000"}
 	let sd = shortdate.split(/[.,/]/);
 	let day = ("0" + parseInt(sd[0]).toString()).slice(-2);
 	let month = ("0" + sd[1].toString()).slice(-2);
