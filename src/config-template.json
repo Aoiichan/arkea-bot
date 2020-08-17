@@ -5,5 +5,8 @@
    "sysadmin": "",
    "guildID": "",
    "menuChannelID": "",
-   "restaurantID": ""
+   "restaurantID": "",
+
+   "embedColor" : "[not implemented yet]",
+   "bottomText" : ""
 }

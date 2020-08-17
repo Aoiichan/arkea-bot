@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import config from './config.json';
-
+import lomat from './lomat.json'
 // Function to get menu. Async needed for await and ...other for extra args in future
 async function getMenu(UrlJSON, day, channel, ...other) {
 	// Fetch data and save it asynchronously to data. Await needed in order for software to write
@@ -34,7 +34,7 @@ async function getMenu(UrlJSON, day, channel, ...other) {
 			"timestamp": new Date(),
 			"footer": {
 				"icon_url": "https://pbs.twimg.com/profile_images/441542471760097280/9sDmsLIm_400x400.jpeg",
-				"text": "© N Production. Hosted by Gaz, " + toHoliday()()
+				"text": config.bottomText + toHoliday()()
 			},
 			"fields": [
 				{
@@ -114,10 +114,10 @@ const getEatingTime = ( atmClass, data ) => {
 
 const toHoliday = () => {
 	let date1 = new Date();
-	let syysloma = new Date("2018-10-15T12:00:00+02:00");
-	let joululoma = new Date("2018-12-23T12:00:00+02:00");
-	let talviloma = new Date("2019-02-18T12:00:00+02:00");
-	let kesaloma = new Date("2019-06-02T12:00:00+02:00");
+	let syysloma = new Date(lomat.syysloma);
+	let joululoma = new Date(lomat.joululoma);
+	let talviloma = new Date(lomat.talviloma);
+	let kesaloma = new Date(lomat.kesaloma);
 	let timeDiff = 0;
 	let diffDays = 0;
 	return (loma) => {
