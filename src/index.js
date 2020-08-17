@@ -91,7 +91,7 @@ bot.on('message', async (message) => {
 				message.channel.send(time)
 			
 			case 'shutdown':
-				if ( message.author.id === config.sysadmin){process.exit;}
+				if ( message.author.id == config.sysadmin){process.exit(0);}
 		
 		}
 	}
