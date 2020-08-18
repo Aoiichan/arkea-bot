@@ -26,9 +26,10 @@ bot.on('ready', () => {
 	console.log('Connected');
 	console.log("Bot has started. Logged in as " + bot.user.username + ". Connected to " + bot.guilds.size + " servers");
 	bot.user.setGame(config.currentGame);
-	channels = getChannelsFromConfig(bot);
+	channels = getChannelsFromConfig(bot); // fetch the channels where menu should be posted in
 });
 
+// get & post the menu to all the channels listed
 async function postMenu () {
 	let result = await SetCWeekMenuURL(config.restaurantID);
 	let day = getThisDay();
@@ -52,42 +53,47 @@ bot.on('message', async (message) => {
 
 		//List of awailable commands
 		switch(cmd) {
-			//Random command, mainly for test purposes
+			// Random command, mainly for test purposes
 			case 'test':
 				message.channel.send("Hello!");
 				break;
 
-			//WIP
+			// brief command list
 			case 'help':
 				message.channel.send("Commands: help, test, menu DD/MM/YY, till syys-/talvi-/joulu-/kesäloma.\nBot prefix: " + config.prefix);
 				//message.channel.send(message.channel);
 				break;
-			
+			// feet
 			case 'feet':
 				message.channel.send(`<@${message.author.id}>, 🍗`);
 				break;
-			//WIP
+
+			// Fetch & post menu for given day (default today) onto the current channel
 			case 'menu':
 				let day;
-				let curChan = [message.channel];
+				let curChan = [message.channel]; // as array to not break .forEach in the procedure
+				
+				// convert date if given, otherwise default to today
 				if (args[1]){
 					day = ConvertToISO(args[1]);
 				} else {day = getThisDay();}
-				
+				// get url and post it only to current channel
 				let result = await SetCWeekMenuURL(config.restaurantID, day);
 				await getMenuFromArkea(result, day).then(menu => {
 					postMenuToDiscord(curChan, menu);
 				});
 				// await getMenu(result, day, message.channel);
 				break;
-
+			
+			// post time until given holiday
 			case 'till':
 				if(args[1])
 					message.channel.send(toHoliday()(args[1]))
 				else
 					message.channel.send(toHoliday()())
 				break;
-
+			
+			// WIP: post eating time for a given class 
 			case 'time':
 				let atmClass = args[1]
 				let special = false
@@ -99,10 +105,11 @@ bot.on('message', async (message) => {
 				else
 					time = getEatingTime(atmClass, data)
 				message.channel.send(time)
-			
+			// debug/test command: posts the menu to ALL CONFIGURED CHANNELS, same way as the scheduled function
 			case 'post':
 				if ( message.author.id == config.sysadmin){await postMenu();}
 				break;
+			// shut down the bot
 			case 'shutdown':
 				if ( message.author.id == config.sysadmin){process.exit(0);}
 				break;
