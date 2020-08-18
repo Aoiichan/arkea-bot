@@ -29,26 +29,21 @@ bot.on('ready', () => {
 	channels = getChannelsFromConfig(bot);
 });
 
-//Schedules, updates every day at 7:00AM. Fetches JSON file from Arkea website and extracts the information. Prints corresponding information for each day.
-let j = schedule.scheduleJob('0 7 * * *', async () => {
-	// Empty config.json to gitignore plsss
-	let result = await SetCWeekMenuURL(config.restaurantID);
-	let day = getThisDay();
-	getMenuFromArkea(result, day).then(menu => {
-		postMenuToDiscord(channels, menu);
-	});
-});
-
-// directly copied from the scheduled job
 async function postMenu () {
 	let channel = bot.guilds.get(config.guildID).channels.get(config.menuChannelID);
 	let result = await SetCWeekMenuURL(config.restaurantID);
 	let day = getThisDay();
 	getMenuFromArkea(result, day).then(menu => {
 		postMenuToDiscord(channels, menu);
-	});
-	
+	});	
 }
+
+//Schedules, updates every day at 7:00AM. '0 7 * * *' Fetches JSON file from Arkea website and extracts the information. Prints corresponding information for each day.
+let j = schedule.scheduleJob(`0 ${config.timeToPost} * * *`, async () => {
+	await postMenu();
+});
+
+
 
 bot.on('message', async (message) => {
 	let content = message.content.toLowerCase();
@@ -65,12 +60,10 @@ bot.on('message', async (message) => {
 
 			//WIP
 			case 'help':
-				message.channel.send("Commands:");
+				message.channel.send("Commands: help, test, menu DD/MM/YY, till syys-/talvi-/joulu-/kesäloma.\nBot prefix: " + config.prefix);
 				//message.channel.send(message.channel);
 				break;
-			case 'post':
-				await postMenu();
-				break;
+
 			//WIP
 			case 'menu':
 				let day;
@@ -105,8 +98,12 @@ bot.on('message', async (message) => {
 					time = getEatingTime(atmClass, data)
 				message.channel.send(time)
 			
+			case 'post':
+				if ( message.author.id == config.sysadmin){await postMenu();}
+				break;
 			case 'shutdown':
 				if ( message.author.id == config.sysadmin){process.exit(0);}
+				break;
 		
 		}
 	}
