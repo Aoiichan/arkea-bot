@@ -2,12 +2,12 @@
 import Discord from 'discord.js';
 import config from './config.json';
 import {getMenuFromArkea, postMenuToDiscord, SetCWeekMenuURL, getEatingTime, toHoliday, getChannelsFromConfig} from './Functions.js';
-import {returnThisDay, ConvertToISO, saveMessage} from './Utility.js';
+import {getThisDay, ConvertToISO, saveMessage} from './Utility.js';
 import responses from './responses.json';
 import schedule from 'node-schedule';
 import data from '../json/timetable.json';
 import specialData from '../json/poikkeusTimetable.json';
-import mongoose from 'mongoose';
+
 
 // Needed for async to work
 require("babel-core/register");
@@ -33,7 +33,7 @@ bot.on('ready', () => {
 let j = schedule.scheduleJob('0 7 * * *', async () => {
 	// Empty config.json to gitignore plsss
 	let result = await SetCWeekMenuURL(config.restaurantID);
-	let day = returnThisDay();
+	let day = getThisDay();
 	getMenuFromArkea(result, day).then(menu => {
 		postMenuToDiscord(channels, menu);
 	});
@@ -43,7 +43,7 @@ let j = schedule.scheduleJob('0 7 * * *', async () => {
 async function postMenu () {
 	let channel = bot.guilds.get(config.guildID).channels.get(config.menuChannelID);
 	let result = await SetCWeekMenuURL(config.restaurantID);
-	let day = returnThisDay();
+	let day = getThisDay();
 	getMenuFromArkea(result, day).then(menu => {
 		postMenuToDiscord(channels, menu);
 	});
@@ -70,11 +70,20 @@ bot.on('message', async (message) => {
 				break;
 			case 'post':
 				await postMenu();
+				break;
 			//WIP
 			case 'menu':
-				let day = ConvertToISO(args[1]);
+				let day;
+				let curChan = [message.channel];
+				if (args[1]){
+					day = ConvertToISO(args[1]);
+				} else {day = getThisDay();}
+				
 				let result = await SetCWeekMenuURL(config.restaurantID, day);
-				await getMenu(result, day, message.channel);
+				await getMenuFromArkea(result, day).then(menu => {
+					postMenuToDiscord(curChan, menu);
+				});
+				// await getMenu(result, day, message.channel);
 				break;
 
 			case 'till':
