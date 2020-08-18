@@ -1,7 +1,7 @@
 //Requirements
 import Discord from 'discord.js';
 import config from './config.json';
-import {getMenuFromArkea, postMenuToDiscord, SetCWeekMenuURL, getEatingTime, toHoliday} from './Functions.js';
+import {getMenuFromArkea, postMenuToDiscord, SetCWeekMenuURL, getEatingTime, toHoliday, getChannelsFromConfig} from './Functions.js';
 import {returnThisDay, ConvertToISO, saveMessage} from './Utility.js';
 import responses from './responses.json';
 import schedule from 'node-schedule';
@@ -14,6 +14,7 @@ require("babel-core/register");
 require("babel-polyfill");
 
 const bot = new Discord.Client();
+let channels = []; //can't be fetched yet must wait for bot login
 
 bot.login(config.token)
 .catch((e) => {
@@ -25,16 +26,16 @@ bot.on('ready', () => {
 	console.log('Connected');
 	console.log("Bot has started. Logged in as " + bot.user.username + ". Connected to " + bot.guilds.size + " servers");
 	bot.user.setGame(config.currentGame);
+	channels = getChannelsFromConfig(bot);
 });
 
 //Schedules, updates every day at 7:00AM. Fetches JSON file from Arkea website and extracts the information. Prints corresponding information for each day.
 let j = schedule.scheduleJob('0 7 * * *', async () => {
 	// Empty config.json to gitignore plsss
- 	let channel = bot.guilds.get(config.guildID).channels.get(config.menuChannelID);
 	let result = await SetCWeekMenuURL(config.restaurantID);
 	let day = returnThisDay();
 	getMenuFromArkea(result, day).then(menu => {
-		postMenuToDiscord(channel, menu);
+		postMenuToDiscord(channels, menu);
 	});
 });
 
@@ -44,11 +45,10 @@ async function postMenu () {
 	let result = await SetCWeekMenuURL(config.restaurantID);
 	let day = returnThisDay();
 	getMenuFromArkea(result, day).then(menu => {
-		postMenuToDiscord(channel, menu);
+		postMenuToDiscord(channels, menu);
 	});
 	
 }
-
 
 bot.on('message', async (message) => {
 	let content = message.content.toLowerCase();

@@ -5,8 +5,11 @@
    "sysadmin": "",
    "guildID": "",
    "menuChannelID": "",
+   "channels" : {
+      "CHANNEL" : "GUILD",
+      "Supports" : "multiple"
+   },
    "restaurantID": "",
-
    "embedColor" : 0,
    "bottomText" : ""
 }

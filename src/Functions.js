@@ -3,6 +3,15 @@ import config from './config.json';
 import lomat from './lomat.json'
 
 
+function getChannelsFromConfig(bot){
+	let channels = config.channels;
+	let tmp = [];
+	Object.keys(channels).forEach(channel => {
+		tmp.push(bot.guilds.get(channels[channel]).channels.get(channel))
+	});
+	return tmp;
+}
+
 //fetch menu asynchronously
 async function getMenuFromArkea(UrlJSON, day, ...other){
 	let data = await fetch(UrlJSON)
@@ -32,10 +41,10 @@ async function getMenuFromArkea(UrlJSON, day, ...other){
 	return await menu;
 }
 
-async function postMenuToDiscord(channel, menu){
+async function postMenuToDiscord(channels, menu){
 	//Send embed message
-	//TODO: change the config to allow multiple channels; channels.forEach(channel => {
-		await channel.send({
+	channels.forEach(channel => {
+		channel.send({
 			embed: {
 				"color": config.embedColor,
 				"timestamp": new Date(),
@@ -57,16 +66,12 @@ async function postMenuToDiscord(channel, menu){
 				]
 			}
 		});
-	/*})*/
+	})
 }
 
 
 
 
-// Function to get menu. Async needed for await and ...other for extra args in future
-async function getMenu(UrlJSON, day, channel, ...other) {
-	// Fetch data and save it asynchronously to data. Await needed in order for software to write
-};
 
 // This function returns correct JSON file for corresponding week. Requires valid RestaurantId. Should be used only with scheduling to avoid unnecessary resource usage.
 // Async needed for await and ...other for extra args in future
@@ -182,4 +187,4 @@ const toHoliday = () => {
 }
 
 // Export all functions
-export {getMenuFromArkea, postMenuToDiscord, SetCWeekMenuURL, getEatingTime, toHoliday}
+export {getMenuFromArkea, postMenuToDiscord, SetCWeekMenuURL, getEatingTime, toHoliday, getChannelsFromConfig}
