@@ -30,7 +30,6 @@ bot.on('ready', () => {
 });
 
 async function postMenu () {
-	let channel = bot.guilds.get(config.guildID).channels.get(config.menuChannelID);
 	let result = await SetCWeekMenuURL(config.restaurantID);
 	let day = getThisDay();
 	getMenuFromArkea(result, day).then(menu => {
