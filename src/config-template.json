@@ -3,6 +3,7 @@
    "prefix": "&",
    "currentGame": "",
    "sysadmin": "",
+   "timeToPost" : 10,
    "channels" : {
       "CHANNEL" : "GUILD",
       "Supports" : "multiple"
