@@ -3,7 +3,11 @@
    "prefix": "&",
    "currentGame": "",
    "sysadmin": "",
-   "guildID": "",
-   "menuChannelID": "",
-   "restaurantID": ""
+   "channels" : {
+      "CHANNEL" : "GUILD",
+      "Supports" : "multiple"
+   },
+   "restaurantID": "",
+   "embedColor" : 0,
+   "bottomText" : ""
 }

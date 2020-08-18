@@ -5,8 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Config file
+# Config files
 src/config.json
+src/lomat.json
 
 # For build
 build/
