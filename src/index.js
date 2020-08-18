@@ -1,7 +1,7 @@
 //Requirements
 import Discord from 'discord.js';
 import config from './config.json';
-import {getMenu, SetCWeekMenuURL, getEatingTime, toHoliday} from './Functions.js';
+import {getMenuFromArkea, postMenuToDiscord, SetCWeekMenuURL, getEatingTime, toHoliday} from './Functions.js';
 import {returnThisDay, ConvertToISO, saveMessage} from './Utility.js';
 import responses from './responses.json';
 import schedule from 'node-schedule';
@@ -33,14 +33,20 @@ let j = schedule.scheduleJob('0 7 * * *', async () => {
  	let channel = bot.guilds.get(config.guildID).channels.get(config.menuChannelID);
 	let result = await SetCWeekMenuURL(config.restaurantID);
 	let day = returnThisDay();
-	getMenu(result, day, channel);
+	getMenuFromArkea(result, day).then(menu => {
+		postMenuToDiscord(channel, menu);
+	});
 });
+
 // directly copied from the scheduled job
 async function postMenu () {
 	let channel = bot.guilds.get(config.guildID).channels.get(config.menuChannelID);
 	let result = await SetCWeekMenuURL(config.restaurantID);
 	let day = returnThisDay();
-	getMenu(result, day, channel);
+	getMenuFromArkea(result, day).then(menu => {
+		postMenuToDiscord(channel, menu);
+	});
+	
 }
 
 

@@ -2,9 +2,9 @@ import fetch from 'isomorphic-fetch'
 import config from './config.json';
 import lomat from './lomat.json'
 
-// Function to get menu. Async needed for await and ...other for extra args in future
-async function getMenu(UrlJSON, day, channel, ...other) {
-	// Fetch data and save it asynchronously to data. Await needed in order for software to write
+
+//fetch menu asynchronously
+async function getMenuFromArkea(UrlJSON, day, ...other){
 	let data = await fetch(UrlJSON)
 		.then((response) => {
 		    if (response.status >= 400) {
@@ -28,29 +28,44 @@ async function getMenu(UrlJSON, day, channel, ...other) {
 	//Vegetarian
 	let SecondMeal = cut[1].Name + "\n";
 
-	//Send embbed message
-	channel.send({
-		embed: {
-			"color": config.embedColor,
-			"timestamp": new Date(),
-			"footer": {
-				"icon_url": "https://pbs.twimg.com/profile_images/441542471760097280/9sDmsLIm_400x400.jpeg",
-				"text": config.bottomText + toHoliday()()
-			},
-			"fields": [
-				{
-					"name": "Lounas:",
-					"value": MainMeal,
-					"inline": true
+	let menu = [MainMeal, SecondMeal];
+	return await menu;
+}
+
+async function postMenuToDiscord(channel, menu){
+	//Send embed message
+	//TODO: change the config to allow multiple channels; channels.forEach(channel => {
+		await channel.send({
+			embed: {
+				"color": config.embedColor,
+				"timestamp": new Date(),
+				"footer": {
+					"icon_url": "https://pbs.twimg.com/profile_images/441542471760097280/9sDmsLIm_400x400.jpeg",
+					"text": config.bottomText + toHoliday()()
 				},
-				{
-					"name": "Kasvislounas:",
-					"value": SecondMeal,
-					"inline": true
-				}
-			]
-		}
-	});
+				"fields": [
+					{
+						"name": "Lounas:",
+						"value": menu[0],
+						"inline": true
+					},
+					{
+						"name": "Kasvislounas:",
+						"value": menu[1],
+						"inline": true
+					}
+				]
+			}
+		});
+	/*})*/
+}
+
+
+
+
+// Function to get menu. Async needed for await and ...other for extra args in future
+async function getMenu(UrlJSON, day, channel, ...other) {
+	// Fetch data and save it asynchronously to data. Await needed in order for software to write
 };
 
 // This function returns correct JSON file for corresponding week. Requires valid RestaurantId. Should be used only with scheduling to avoid unnecessary resource usage.
@@ -167,4 +182,4 @@ const toHoliday = () => {
 }
 
 // Export all functions
-export {getMenu, SetCWeekMenuURL, getEatingTime, toHoliday}
+export {getMenuFromArkea, postMenuToDiscord, SetCWeekMenuURL, getEatingTime, toHoliday}
