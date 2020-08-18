@@ -62,7 +62,10 @@ bot.on('message', async (message) => {
 				message.channel.send("Commands: help, test, menu DD/MM/YY, till syys-/talvi-/joulu-/kesäloma.\nBot prefix: " + config.prefix);
 				//message.channel.send(message.channel);
 				break;
-
+			
+			case 'feet':
+				message.channel.send(`<@${message.author.id}>, 🍗`);
+				break;
 			//WIP
 			case 'menu':
 				let day;
