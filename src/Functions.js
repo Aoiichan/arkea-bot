@@ -186,5 +186,7 @@ const toHoliday = () => {
 	}
 }
 
+
+
 // Export all functions
 export {getMenuFromArkea, postMenuToDiscord, SetCWeekMenuURL, getEatingTime, toHoliday, getChannelsFromConfig}
